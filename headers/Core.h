@@ -2,19 +2,24 @@
 #define CORE_H
 
 #include "EventQueue.h"
+
 #include "ProcessList.h"
 #include "QueuePair.h"
-#include <list>
+#include <map>
 
 struct Core {
     // essential properties
     float time_piece;
     float turnarounds;
+    float arrivalRate;
+    float serviceTime;
+    int scenario;
+    int numProcessors;
     int arrivals;
     int departures;
     bool processes_empty;
     bool events_empty;
-    int scenario;
+    
     ProcessList processes;
     EventQueue eq;
 
@@ -30,13 +35,12 @@ struct Core {
     ReadyQueue rq;
 
     // scenario 2 specific properties
-    std::list<QueuePair> queues;
+    std::map<int, QueuePair*> queues;
 
-
-
-
-
-}
+    // initialize core vars based on scenario
+    void initialize();
+    
+};
 
 
 

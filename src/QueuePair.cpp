@@ -2,7 +2,7 @@
 #include "../headers/Processor.h"
 #include "../headers/ReadyQueue.h"
 
-struct QueuePair {
-    Processor processor;
-    ReadyQueue readyqueue;
+QueuePair::QueuePair(ReadyQueue* rq, Processor* prc) {
+    this->rq = rq;
+    this->prc = prc;
 }

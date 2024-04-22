@@ -13,8 +13,8 @@ int argChecks(int argc, char* argv[])
         try {
             float arrivalRate = std::stof(argv[1]);
             float serviceTime = std::stof(argv[2]);
-            float scenario = std::stof(argv[3]);
-            float processors = std::stof(argv[4]);
+            float scenario = std::stoi(argv[3]);
+            float processors = std::stoi(argv[4]);
         } 
         // catch for type mismatch
         catch (const std::invalid_argument& ia)

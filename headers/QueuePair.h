@@ -5,10 +5,10 @@
 #include "Processor.h"
 
 struct QueuePair {
-    QueuePair(ReadyQueue rq, Processor prc);
+    QueuePair(ReadyQueue* rq, Processor* prc);
 
-    ReadyQueue rq;
-    Processor prc;
+    ReadyQueue* rq;
+    Processor* prc;
 };
 
 

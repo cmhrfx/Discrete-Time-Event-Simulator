@@ -29,10 +29,10 @@ int main(int argc, char *argv[])
     // main driver logic //
 
     // assign console arguments to variables
-    float arrivalRate = std::stof(argv[1]);
-    float serviceTime = std::stof(argv[2]);
-    float scenario = std::stof(argv[3]);
-    float processors = std::stof(argv[4]);
+    core.arrivalRate = std::stof(argv[1]);
+    core.serviceTime = std::stof(argv[2]);
+    core.scenario = std::stoi(argv[3]);
+    core.numProcessors = std::stoi(argv[4]);
     
 
 
