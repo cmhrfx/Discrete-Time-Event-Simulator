@@ -2,6 +2,9 @@
 #define EVENT_H
 
 #include "Process.h"
+#include <string>
+
+using std::string;
 
 struct Event {
     Event(Process* process, float time, std::string type);
