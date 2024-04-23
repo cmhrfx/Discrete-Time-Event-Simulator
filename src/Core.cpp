@@ -51,5 +51,4 @@ void Core::initialize()
             queues[i] = qp;
         }
     }
-
 }

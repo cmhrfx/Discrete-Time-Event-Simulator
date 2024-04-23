@@ -1,7 +1,9 @@
 #include "../headers/Processor.h"
 
-struct Processor {
-    int cpu_status;
-    float last_arrival;
-    float last_departure;
+Processor::Processor()
+{
+    cpu_status = 0;
+    last_arrival = 0;
+    last_departure = 0;
 }
+

@@ -2,6 +2,7 @@
 #define EVENTQUEUE_H
 
 #include "Event.h"
+#include <list>
 
 struct EventQueue {
     EventQueue();

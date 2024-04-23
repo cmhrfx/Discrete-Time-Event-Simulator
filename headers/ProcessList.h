@@ -3,9 +3,7 @@
 
 #include "Process.h"
 #include "Event.h"
-#include <ctime>
-#include <random>
-#include <math.h>
+#include "Functions.h"
 #include <cstdlib>
 #include <list>
 #include <iostream>
@@ -18,6 +16,7 @@ struct ProcessList {
 
     ProcessList(float arrivalRate, float serviceTime);
     ProcessList();
+    
     void listToConsole();
     Process* popProcess();
     bool isEmpty();

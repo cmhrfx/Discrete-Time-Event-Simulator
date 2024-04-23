@@ -33,7 +33,19 @@ int main(int argc, char *argv[])
     core.serviceTime = std::stof(argv[2]);
     core.scenario = std::stoi(argv[3]);
     core.numProcessors = std::stoi(argv[4]);
-    
 
+    // seed rand
+    srand(time(NULL));
+
+    // initialize core
+    // this creates the processList and handles scenario 1 vs scenario 2
+    // core variables
+    core.initialize();
+
+
+
+
+    
+    return 0;
 
 }

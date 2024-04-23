@@ -51,3 +51,15 @@ void argChecktoConsole(int flag)
     else if (flag == 4)
         {cout << "Must select scenario 1 or 2. Please try again.\n";}
 }
+
+
+float expRandom(float lambda)
+{
+    float random = rand() / (RAND_MAX + 1.0);
+    return -log(1 - random) / lambda;
+}
+
+float rand0to1()
+{
+    return (rand() / (RAND_MAX + 1.0));
+}
