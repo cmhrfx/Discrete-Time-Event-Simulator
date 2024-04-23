@@ -13,8 +13,8 @@ int argChecks(int argc, char* argv[])
         try {
             float arrivalRate = std::stof(argv[1]);
             float serviceTime = std::stof(argv[2]);
-            float scenario = std::stoi(argv[3]);
-            float processors = std::stoi(argv[4]);
+            int scenario = std::stoi(argv[3]);
+            int processors = std::stoi(argv[4]);
         } 
         // catch for type mismatch
         catch (const std::invalid_argument& ia)
@@ -29,7 +29,7 @@ int argChecks(int argc, char* argv[])
     }
 
     // check that either scenario 1 or 2 is selected
-    if (*argv[3] != '1' || *argv[3] != '2')
+    if (*argv[3] != '1' && *argv[3] != '2')
     {
         flag = 4;
     }

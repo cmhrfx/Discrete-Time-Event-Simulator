@@ -16,14 +16,13 @@ struct ProcessList {
 
     ProcessList(float arrivalRate, float serviceTime);
     ProcessList();
-    
+    ~ProcessList();
+
     void listToConsole();
     Process* popProcess();
     bool isEmpty();
     void populateList(float arrivalRate, float serviceTime);
-    float genExponentialRandom(float lambda);
-    ~ProcessList();
-
+    
 };
 
 

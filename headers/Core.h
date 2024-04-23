@@ -2,7 +2,6 @@
 #define CORE_H
 
 #include "EventQueue.h"
-
 #include "ProcessList.h"
 #include "QueuePair.h"
 #include <map>
@@ -38,8 +37,9 @@ struct Core {
     std::map<int, QueuePair*> queues;
 
     // initialize core vars based on scenario
+    Core();
     void initialize();
-    
+
 };
 
 

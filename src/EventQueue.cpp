@@ -42,7 +42,6 @@ void EventQueue::scheduleEvent(Event* newEvent)
     }
 }
 
-
 EventQueue::~EventQueue()
 {
     for (auto& event : events)

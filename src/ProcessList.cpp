@@ -18,12 +18,62 @@ void ProcessList::populateList(float arrivalRate, float serviceTime)
         float generationTime = 0;
         for (int i = 0; i < LENGTH; i++)
         {
-            float interArrivalTime = genExponentialRandom(arrivalRate);
+            float interArrivalTime = expRandom(arrivalRate);
             generationTime += interArrivalTime;
-            Process* newProcess = new Process(i + 1, generationTime, genExponentialRandom(1/serviceTime));
+            Process* newProcess = new Process(i + 1, generationTime, expRandom(1/serviceTime));
             processes.push_back(newProcess);
         }
     }
+    else {
+        Process* newProcess = new Process(0, 0, 0);
+        processes.push_back(newProcess);
+    }
 }
 
+
+void ProcessList::listToConsole()
+{
+    std::cout   << std::left << std::setw(12) << "Process ID"
+                << std::setw(15) << "Arrival Time"
+                << std::setw(15) << "Service Time"
+                << std::endl;
+    std::cout   << std::string(42, '-') << std::endl;
+
+    for (const auto& process : processes)
+    {
+        std::cout << std::left << std::setw(12) << process->id
+                  << std::setw(15) << process->arrivalTime
+                  << std::setw(15) << process->serviceTime
+                  << std::endl;
+    }
+}
+
+// popProcess() cleanly returns the front element of a ProcessList and 
+// then removes it from that list. 
+Process* ProcessList::popProcess()
+{
+    Process* process = nullptr;
+    if (!processes.empty())
+    {
+        process = processes.front();
+        processes.pop_front();
+    }
+    return process;
+}
+
+// Return if the process list is empty 
+// originally made when 'processes' property was private
+bool ProcessList::isEmpty()
+{
+    return processes.empty();
+}
+
+// Default Destructor
+ProcessList::~ProcessList()
+{
+    for (Process* process : processes) {
+        delete process;
+    }
+    processes.clear();
+}
 

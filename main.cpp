@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
     // core variables
     core.initialize();
 
+    // test processList population
+    core.processes.listToConsole();
 
 
 
