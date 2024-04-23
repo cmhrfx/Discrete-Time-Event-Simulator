@@ -23,12 +23,13 @@ Core::Core() {
     Process* pollProcess;
 
     // scenario 1 specific properties
+    std::map<int, QueuePair*> queuePairs;
+
+    // scenario 2 specific properties
     float cpu_active_count = 0;
     int cpu_status = 0;
     ReadyQueue rq;
-
-    // scenario 2 specific properties
-    std::map<int, QueuePair*> queues;
+    std::map<int, Processor*> processors;
 
 };
 
@@ -40,15 +41,20 @@ void Core::initialize()
     // handle scenario 1 instantiations
     if (scenario == 1)
     {
-
-    }
-    else {
         for (int i = 0; i < numProcessors; i++)
         {
             Processor* prc = new Processor();
             ReadyQueue* rq = new ReadyQueue();
             QueuePair* qp = new QueuePair(rq, prc);
-            queues[i] = qp;
+            queuePairs[i] = qp;
         }
+    }
+    else {
+        for (int i = 0; i < numProcessors; i++)
+        {
+            Processor* prc = new Processor();
+            processors[i] = prc;
+        }
+
     }
 }

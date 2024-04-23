@@ -7,12 +7,13 @@
 using std::string;
 
 struct Event {
-    Event(Process* process, float time, std::string type);
+    Event(Process* process, float time, std::string type, int processorId);
     Event();
 
     Process* process;
     float time;
     std::string type;
+    int processorId;
 
 
 };

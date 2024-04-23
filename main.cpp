@@ -45,6 +45,20 @@ int main(int argc, char *argv[])
     // test processList population
     core.processes.listToConsole();
 
+    while (!core.eq.events.empty())
+    {
+        Event* event = core.eq.getEvent();
+        core.time_piece = event->time;
+
+        if (event->type == "arrival")
+            {handleArrival(event, core.scenario);}
+        else if (event->type == "departure")
+            {handleDeparture(event, core.scenario);}
+        else
+            {handlePoll(event, core.scenario);}
+
+    }
+
 
 
     

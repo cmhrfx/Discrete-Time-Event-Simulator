@@ -29,12 +29,13 @@ struct Core {
     Process* pollProcess;
 
     // scenario 1 specific properties
+    std::map<int, QueuePair*> queuePairs;
+
+    // scenario 2 specific properties
     float cpu_active_count;
     int cpu_status;
     ReadyQueue rq;
-
-    // scenario 2 specific properties
-    std::map<int, QueuePair*> queues;
+    std::map<int, Processor*> processors;
 
     // initialize core vars based on scenario
     Core();

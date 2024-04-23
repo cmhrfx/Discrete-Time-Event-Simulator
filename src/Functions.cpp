@@ -63,3 +63,128 @@ float rand0to1()
 {
     return (rand() / (RAND_MAX + 1.0));
 }
+
+// handleArrival() is a core function of the Discrete Time Event Simulator engine.
+// Called when current Event is an arrival.
+// Based on the cpu_status, one of two paths will be taken:
+// if cpu_status is 0, the new arrival event is converted immediately into a new 
+// departure event. cpu_status is also flipped to 1. 
+// if cpu_status is 1, the new arrival event is converted into a process placed
+// in the ready queue.
+// In both cases, the next arrival event is created from the ProcessList and added
+// to the event queue. 
+void handleArrival(Event* event)
+{
+    core.arrivals++;
+    int targetProcessor = -1;
+    int currentProcessor = event->processorId;
+
+    
+    // Path 1- idle CPU
+    if (core.processors[currentProcessor]->cpu_status == 0)
+    {
+        core.processors[currentProcessor]->cpu_status = 1;
+        float interval = event->process->serviceTime + core.time_piece;
+        Event* newDeparture = new Event(event->process, interval, "departure", targetProcessor);
+        core.eq.scheduleEvent(newDeparture);
+    }
+    // Path 2- busy CPU
+    if (core.scenario == 1)
+    {
+        core.queuePairs[currentProcessor]->rq->addProcess(event->process);
+    }
+    else if (core.scenario == 2)
+    {
+        core.rq.addProcess(event->process);
+    }
+
+    // Both paths end in the creation of a new arrival event from ProcessList
+    Process* nextProcess = core.processes.popProcess();
+
+    // handle for multi-core, multi queue setup
+    float queueDist = rand0to1();
+
+    if (queueDist >= 0 && queueDist <= .25)
+    {
+        targetProcessor = 0;
+    }
+    else if (queueDist >= .25 && queueDist <= .50)
+    {
+        targetProcessor = 1;
+    }
+    else if (queueDist >= .5 && queueDist <= .75)
+    {
+        targetProcessor = 2;
+    }
+    else if (queueDist >= .75 && queueDist <= 1.00)
+    {
+        targetProcessor = 3;
+    }
+
+    // Check that ProcessList isn't empty
+    if (nextProcess == nullptr)
+    {
+        core.processes_empty = true;
+    }
+    else
+    {
+        Event* newArrival = new Event(nextProcess, nextProcess->arrivalTime, "arrival", targetProcessor);
+        core.eq.scheduleEvent(newArrival);
+    }
+
+}
+
+
+// handleDeparture() is a core function of the Discrete Time Event Simulator engine.
+// Called when the current event is a departure. 
+// Based on the ready_queue, one of two paths will be taken.
+// If ready_queue is empty, cpu_status is set to 0. 
+// If ready_queue contains a process, it is popped and a new departure event 
+// is made of that process.
+
+void handleDeparture(Event* event)
+{
+    core.departures++;
+
+    if (core.scenario == 1)
+    {
+
+    }
+
+    if (core.rq.isEmpty())
+    {
+        core.cpu_status = 0;
+    }
+    else
+    {
+        Process* currentProcess = core.rq.popFront();
+        float interval = currentProcess->serviceTime + core.time_piece;
+        Event* newDeparture = new Event(currentProcess, interval, "departure", event->processorId);
+        core.eq.scheduleEvent(newDeparture);
+    }
+    core.turnarounds += event->time - event->process->arrivalTime;
+
+}
+
+// handlePoll() is key to quantifying metrics of the DTES.
+// Upon instantiation, the Event Queue contains a first instance of a poll event.
+// When this first instance is processed, handlePoll then schedules a following
+// poll event. This process repeats until the Process Queue is empty.
+// Variables under the global "core" struct are used to track these metrics.
+void handlePoll(Event* event)
+{
+    if (!core.processes_empty)
+    {
+        core.sample_queue += core.rq.size();
+        core.sample_polls++;
+        if (core.cpu_status == 1)
+        {
+            core.cpu_active_count++;
+        }
+
+        Event* nextPoll = new Event(core.pollProcess, 
+        core.time_piece + core.polling_interval, "poll");
+        core.eq.scheduleEvent(nextPoll);
+    }
+
+}
