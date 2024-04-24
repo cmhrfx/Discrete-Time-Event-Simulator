@@ -14,10 +14,13 @@ Based on the console arguments provided, one of either scenario will be ran by t
 Once complete, metrics will be displayed to the console and exported to either "cmh171s1.txt"
 or "cmh171s2.txt", depending on the scenario selected.
 
-Finally, certain parts of this implementation are designed to handle a variable number of processors.
+Furthermore, certain parts of this implementation are designed to handle a variable number of processors.
 However, it appears that fully implementing "n" processors is extraneous to design specifications.
 Thus, the design is implemented specifically for 4 processors and will exhibit problems if any other
 number of processors is used. 
+
+Finally, the repo is complete with multirun1.sh and multirun2.sh which have been written to support
+iterating through the requested console argument sets. They will write to the aforementioned .txt files.
 */
 
 #include "main.h"
