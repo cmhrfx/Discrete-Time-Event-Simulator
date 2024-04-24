@@ -21,6 +21,7 @@ struct Core {
     
     ProcessList processList;
     EventQueue eq;
+    ReadyQueue rq;
 
     // polling
     float sample_queue;
@@ -34,11 +35,11 @@ struct Core {
     // scenario 2 specific properties
     float cpu_active_count;
     int cpu_status;
-    ReadyQueue rq;
     std::map<int, Processor*> processors;
 
     // initialize core vars based on scenario
     Core();
+    ~Core();
     void initialize();
 
 };

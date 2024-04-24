@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     core.initialize();
 
     // test processList population
-    core.processList.listToConsole();
+    // core.processList.listToConsole();
 
     while (!core.eq.events.empty())
     {

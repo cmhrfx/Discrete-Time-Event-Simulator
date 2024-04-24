@@ -6,6 +6,7 @@
 
 struct QueuePair {
     QueuePair(ReadyQueue* rq, Processor* prc);
+    ~QueuePair();
 
     ReadyQueue* rq;
     Processor* prc;

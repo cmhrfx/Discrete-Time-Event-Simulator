@@ -71,9 +71,9 @@ void handleArrivalS1(Event* event)
     {
         core.arrivals++;
         // Path 1- idle CPU
-        if (core.processors[currentProcessor]->cpu_status == 0 )
+        if (core.queuePairs[currentProcessor]->prc->cpu_status == 0)
         {
-            core.processors[currentProcessor]->cpu_status = 1;
+            core.queuePairs[currentProcessor]->prc->cpu_status = 1;
             float interval = event->process->serviceTime + core.time_piece;
             Event* newDeparture = new Event(event->process, interval, "departure", currentProcessor);
             core.eq.scheduleEvent(newDeparture);

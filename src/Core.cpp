@@ -12,9 +12,6 @@ Core::Core() {
     int departures = 0;
     bool processes_empty = false;
     bool events_empty = false;
-    
-    ProcessList processList;
-    EventQueue eq;
 
     // polling
     float sample_queue = 0;
@@ -22,14 +19,9 @@ Core::Core() {
     float polling_interval = 0.1;
     Process* pollProcess = new Process(-1,0,0);
 
-    // scenario 1 specific properties
-    std::map<int, QueuePair*> queuePairs;
-
-    // scenario 2 specific properties
+    // scenario 2 specific
     float cpu_active_count = 0;
     int cpu_status = 0;
-    ReadyQueue rq;
-    std::map<int, Processor*> processors;
 
 };
 
@@ -56,4 +48,11 @@ void Core::initialize()
             processors[i] = prc;
         }
     }
+}
+
+Core::~Core()
+{
+    queuePairs.clear();
+    processors.clear();
+    delete pollProcess;
 }

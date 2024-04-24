@@ -8,3 +8,9 @@ QueuePair::QueuePair(ReadyQueue* rq, Processor* prc) {
     active_count = 0;
     sample_queue = 0;
 }
+
+QueuePair::~QueuePair()
+{
+    delete rq;
+    delete prc;
+}

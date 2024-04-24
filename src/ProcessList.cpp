@@ -12,7 +12,7 @@ ProcessList::ProcessList()
 
 void ProcessList::populateList(float arrivalRate, float serviceTime)
 {
-    if (!this->isEmpty()){
+    if (!this->processes.empty()){
         this->processes.clear();
     }
     
@@ -27,10 +27,6 @@ void ProcessList::populateList(float arrivalRate, float serviceTime)
             Process* newProcess = new Process(i + 1, generationTime, expRandom(1/serviceTime));
             processes.push_back(newProcess);
         }
-    }
-    else {
-        Process* newProcess = new Process(0, 0, 0);
-        processes.push_back(newProcess);
     }
 }
 
