@@ -169,7 +169,7 @@ void handlePollS1(Event* event)
         core.sample_polls++;
 
         Event* nextPoll = new Event(core.pollProcess, 
-        core.time_piece + core.polling_interval, "poll", -1);
+            core.time_piece + core.polling_interval, "poll", -1);
         core.eq.scheduleEvent(nextPoll);
     }
 
@@ -177,21 +177,38 @@ void handlePollS1(Event* event)
 
 void handleArrivalS2(Event* event)
 {
-    core.arrivals++;
     int targetProcessor = -1;
     int currentProcessor = event->processorId;
 
     // Path 1- idle CPU
-    if (core.processors[currentProcessor]->cpu_status == 0)
+    if (currentProcessor != -1)
     {
-        core.processors[currentProcessor]->cpu_status = 1;
-        float interval = event->process->serviceTime + core.time_piece;
-        Event* newDeparture = new Event(event->process, interval, "departure", currentProcessor);
-        core.eq.scheduleEvent(newDeparture);
-    }
-    // Path 2- busy CPU
-    else {
-        core.rq.addProcess(event->process);
+        core.arrivals++;
+        if (core.rq.isEmpty())
+        {
+            int openProcessor = -1;
+            int count = 0;
+            while (openProcessor == -1 && count < core.numProcessors)
+            {
+                if (core.queuePairs[count]->prc->cpu_status == 0)
+                {
+                    openProcessor = count;
+                    core.queuePairs[count]->prc->cpu_status = 1;
+                    float interval = event->process->serviceTime + core.time_piece;
+                    Event* newDeparture = new Event(event->process, interval, "departure", count);
+                    core.eq.scheduleEvent(newDeparture);
+                }
+                count++;
+            }
+            if (openProcessor == -1)
+            {
+                core.rq.addProcess(event->process);
+            }
+        }
+        else
+        {
+            core.rq.addProcess(event->process);
+        }
     }
 
     // Both paths end in the creation of a new arrival event from ProcessList
@@ -204,26 +221,7 @@ void handleArrivalS2(Event* event)
     }
     else
     {
-        // randomly pick next core
-        float queueDist = rand0to1();
-        if (queueDist >= 0 && queueDist <= .25)
-        {
-            targetProcessor = 0;
-        }
-        else if (queueDist >= .25 && queueDist <= .50)
-        {
-            targetProcessor = 1;
-        }
-        else if (queueDist >= .5 && queueDist <= .75)
-        {
-            targetProcessor = 2;
-        }
-        else if (queueDist >= .75 && queueDist <= 1.00)
-        {
-            targetProcessor = 3;
-        }
-
-        Event* newArrival = new Event(nextProcess, nextProcess->arrivalTime, "arrival", targetProcessor);
+        Event* newArrival = new Event(nextProcess, nextProcess->arrivalTime, "arrival", -2);
         core.eq.scheduleEvent(newArrival);
     }
 
@@ -244,14 +242,14 @@ void handleDepartureS2(Event* event)
 
     if (core.rq.isEmpty())
     {
-        core.cpu_status = 0;
+        core.queuePairs[currentProcessor]->prc->cpu_status = 0;
     }
     else
     {
         Process* currentProcess = core.rq.popFront();
         float interval = currentProcess->serviceTime + core.time_piece;
         Event* newDeparture = new Event(currentProcess, interval, "departure", event->processorId);
-        core.eq.scheduleEvent(newDeparture);
+                                        core.eq.scheduleEvent(newDeparture);
     }
 
     core.turnarounds += event->time - event->process->arrivalTime;
@@ -279,7 +277,7 @@ void handlePollS2(Event* event)
         }
 
         Event* nextPoll = new Event(core.pollProcess, 
-        core.time_piece + core.polling_interval, "poll", -1);
+            core.time_piece + core.polling_interval, "poll", -1);
         core.eq.scheduleEvent(nextPoll);
     }
 
@@ -302,7 +300,6 @@ void outputMetricsS1()
     for (int i = 0; i < core.numProcessors; i++)
     {
         queue_lengths[i] = core.queuePairs[i]->sample_queue / core.sample_polls;
-        cout << "queue_length " << i << ": " << queue_lengths[i] << "\n";
     }
 
     cout << std::fixed << std::setprecision(5);

@@ -35,7 +35,6 @@ struct Core {
     // scenario 2 specific properties
     float cpu_active_count;
     int cpu_status;
-    std::map<int, Processor*> processors;
 
     // initialize core vars based on scenario
     Core();

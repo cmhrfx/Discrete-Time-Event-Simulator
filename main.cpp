@@ -65,7 +65,6 @@ int main(int argc, char *argv[])
                 {handleDepartureS2(event);}
             else
                 {handlePollS2(event);}
-
         }
     }
 
