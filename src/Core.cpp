@@ -2,26 +2,26 @@
 
 Core::Core() {
     // essential properties
-    float time_piece = 0;
-    float turnarounds = 0;
-    float arrivalRate = 0;
-    float serviceTime = 0;
-    int scenario = 0;
-    int numProcessors = 0;
-    int arrivals = 0;
-    int departures = 0;
-    bool processes_empty = false;
-    bool events_empty = false;
+    time_piece = 0;
+    turnarounds = 0;
+    arrivalRate = 0;
+    serviceTime = 0;
+    scenario = 0;
+    numProcessors = 0;
+    arrivals = 0;
+    departures = 0;
+    processes_empty = false;
+    events_empty = false;
 
     // polling
-    float sample_queue = 0;
-    float sample_polls = 0;
-    float polling_interval = 0.1;
+    sample_queue = 0;
+    sample_polls = 0;
+    polling_interval = 0.1;
     Process* pollProcess = new Process(-1,0,0);
 
     // scenario 2 specific
-    float cpu_active_count = 0;
-    int cpu_status = 0;
+    cpu_active_count = 0;
+    cpu_status = 0;
 
 };
 

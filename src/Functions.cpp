@@ -296,12 +296,13 @@ void outputMetrics()
 
     for (int i = 0; i < core.numProcessors; i++)
     {
-        cpu_utils[i] = core.queuePairs[i]->active_count / core.sample_polls;
+        cpu_utils[i] = (core.queuePairs[i]->active_count / core.sample_polls) * 100;
     }
 
     for (int i = 0; i < core.numProcessors; i++)
     {
         queue_lengths[i] = core.queuePairs[i]->sample_queue / core.sample_polls;
+        cout << "queue_length " << i << ": " << queue_lengths[i] << "\n";
     }
 
     cout << std::fixed << std::setprecision(5);
@@ -312,15 +313,15 @@ void outputMetrics()
     cout << "| Service Time       | " << setw(15) << core.serviceTime << " |\n";
     cout << "| Average Turnaround | " << setw(15) << avg_turnaround << " |\n";
     cout << "| Throughput         | " << setw(15) << throughput << " |\n";
-    cout << "| CPU Utilization    : " << setw(15) << "|\n"; 
+    cout << "| CPU Utilization         " << setw(15) << "|\n"; 
     for (int i = 0; i < core.numProcessors; i++)
     {
-        cout << "| Core " << i << ": " << setw(15) << cpu_utils[i] << "% |\n";
+        cout << "| Core " << i << ":             " << setw(15) << cpu_utils[i] << "% |\n";
     }
-    cout << "| Average RQ Length  : " << setw(15) << " |\n";
+    cout << "| Average RQ Length       " << setw(15) << " |\n";
     for (int i = 0; i < core.numProcessors; i++)
     {
-        cout << "| Core " << i << ": " << setw(15) << " |\n";
+        cout << "| Core " << i << ":              " << setw(15) << queue_lengths[i] << " |\n";
     }
     cout << "-----------------------------------------\n";
 

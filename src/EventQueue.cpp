@@ -5,7 +5,7 @@ EventQueue::EventQueue()
     Process* initiationProcess = new Process(0,0,0);
     Event* initiationEvent = new Event(initiationProcess,0,"arrival", -1);
     Process* initialPollProcess = new Process(-1,0,0);
-    Event* initiationPoll = new Event(initialPollProcess,0.01,"poll", -1);
+    Event* initiationPoll = new Event(initialPollProcess,0.1,"poll", -1);
     events.push_back(initiationEvent);
     events.push_back(initiationPoll);
 
