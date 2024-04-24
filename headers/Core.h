@@ -19,7 +19,7 @@ struct Core {
     bool processes_empty;
     bool events_empty;
     
-    ProcessList processes;
+    ProcessList processList;
     EventQueue eq;
 
     // polling

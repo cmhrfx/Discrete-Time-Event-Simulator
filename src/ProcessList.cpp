@@ -12,6 +12,10 @@ ProcessList::ProcessList()
 
 void ProcessList::populateList(float arrivalRate, float serviceTime)
 {
+    if (!this->isEmpty()){
+        this->processes.clear();
+    }
+    
     // don't really populate list on default construction
     if (arrivalRate != 0 && serviceTime != 0)
     {

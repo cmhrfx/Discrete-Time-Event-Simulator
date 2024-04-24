@@ -85,7 +85,7 @@ void handleArrivalS1(Event* event)
     }
 
     // Both paths end in the creation of a new arrival event from ProcessList
-    Process* nextProcess = core.processes.popProcess();
+    Process* nextProcess = core.processList.popProcess();
 
     // Check that ProcessList isn't empty
     if (nextProcess == nullptr)
@@ -195,7 +195,7 @@ void handleArrivalS2(Event* event)
     }
 
     // Both paths end in the creation of a new arrival event from ProcessList
-    Process* nextProcess = core.processes.popProcess();
+    Process* nextProcess = core.processList.popProcess();
 
     // Check that ProcessList isn't empty
     if (nextProcess == nullptr)

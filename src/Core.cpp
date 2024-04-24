@@ -13,14 +13,14 @@ Core::Core() {
     bool processes_empty = false;
     bool events_empty = false;
     
-    ProcessList processes;
+    ProcessList processList;
     EventQueue eq;
 
     // polling
     float sample_queue = 0;
     float sample_polls = 0;
     float polling_interval = 0.1;
-    Process* pollProcess;
+    Process* pollProcess = new Process(-1,0,0);
 
     // scenario 1 specific properties
     std::map<int, QueuePair*> queuePairs;
@@ -36,7 +36,7 @@ Core::Core() {
 void Core::initialize()
 {
     // populate process list
-    processes.populateList(arrivalRate, serviceTime);
+    processList.populateList(arrivalRate, serviceTime);
 
     // handle scenario 1 instantiations
     if (scenario == 1)
