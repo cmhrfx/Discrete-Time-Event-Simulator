@@ -71,10 +71,10 @@ int main(int argc, char *argv[])
     if (core.scenario == 1)
     {
         outputMetricsS1();
-        logMetricsS1("cmh171.txt");
+        logMetricsS1("cmh171s1.txt");
     } else {
         outputMetricsS2();
-        logMetricsS2("cmh171.txt");
+        logMetricsS2("cmh171s2.txt");
     }
     
     return 0;
