@@ -11,10 +11,17 @@ int argChecks(int argc, char* argv[])
     else
     {
         try {
+            std::cout << "arrivalRate: " << std::stof(argv[1]) << std::endl;
+            std::cout << "serviceTime: " << std::stof(argv[2]) << std::endl;
+            std::cout << "scenario: " << std::stoi(argv[3]) << std::endl;
+            std::cout << "processors: " << std::stoi(argv[4]) << std::endl;
+
             float arrivalRate = std::stof(argv[1]);
             float serviceTime = std::stof(argv[2]);
             int scenario = std::stoi(argv[3]);
             int processors = std::stoi(argv[4]);
+
+            
         } 
         // catch for type mismatch
         catch (const std::invalid_argument& ia)
@@ -364,10 +371,6 @@ void logMetricsS1(string path)
     }
     else
     {
-        outFile << "arrivalRate, serviceTime, throughput, turnaroundTime"
-                << ", core0_util, core1_util, core2_util, core3_util"
-                << "avg_core0_rqLen, avg_core1_rqLen, avg_core2_rqLen, avg_core3_rqLen"
-                << endl;
         outFile << core.arrivalRate << "," << core.serviceTime << "," << (core.turnarounds / LENGTH)
         << "," << (LENGTH / core.time_piece) << "," 
         << core.queuePairs[0]->active_count / core.sample_polls << ","
@@ -392,9 +395,6 @@ void logMetricsS2(string path)
     }
     else
     {
-        outFile << "arrivalRate, serviceTime, throughput, turnaroundTime"
-                << ", core0_util, core1_util, core2_util, core3_util"
-                << "avg_rqLen" << endl;
         outFile << core.arrivalRate << "," << core.serviceTime << "," << (core.turnarounds / LENGTH)
         << "," << (LENGTH / core.time_piece) << "," 
         << core.queuePairs[0]->active_count / core.sample_polls << ","

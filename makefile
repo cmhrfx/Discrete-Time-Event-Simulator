@@ -1,0 +1,2 @@
+p2: main.cpp src/Event.cpp src/EventQueue.cpp src/Process.cpp src/ProcessList.cpp src/ReadyQueue.cpp src/Functions.cpp src/Core.cpp src/QueuePair.cpp src/Processor.cpp
+	g++ main.cpp src/Event.cpp src/EventQueue.cpp src/Process.cpp src/ProcessList.cpp src/ReadyQueue.cpp src/Functions.cpp src/Core.cpp src/QueuePair.cpp src/Processor.cpp -o p2
