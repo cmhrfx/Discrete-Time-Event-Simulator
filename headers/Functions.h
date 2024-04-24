@@ -27,7 +27,10 @@ void handlePollS1(Event* event);              // logic sequence for poll events
 void handleArrivalS2(Event* event);           // logic sequence for arrival events
 void handleDepartureS2(Event* event);         // logic sequence for departure events
 void handlePollS2(Event* event);              // logic sequence for poll events
-void outputMetrics();
+void outputMetricsS1();
+void outputMetricsS2();
+void logMetricsS1(string path);
+void logMetricsS2(string path);
 float rand0to1();
 float expRandom(float lambda);
 

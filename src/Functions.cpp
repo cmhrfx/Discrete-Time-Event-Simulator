@@ -285,7 +285,7 @@ void handlePollS2(Event* event)
 
 }
 
-void outputMetrics()
+void outputMetricsS1()
 {
     float avg_turnaround = core.turnarounds / LENGTH;
     float throughput = LENGTH / core.time_piece;
@@ -325,6 +325,89 @@ void outputMetrics()
     }
     cout << "-----------------------------------------\n";
 
+}
+
+void outputMetricsS2()
+{
+    float avg_turnaround = core.turnarounds / LENGTH;
+    float throughput = LENGTH / core.time_piece;
+    float cpu = core.cpu_active_count / core.sample_polls;
+    float avg_rq = core.sample_queue / core.sample_polls;
+    std::map<int, float>cpu_utils;
+
+    for (int i = 0; i < core.numProcessors; i++)
+    {
+        cpu_utils[i] = (core.queuePairs[i]->active_count / core.sample_polls) * 100;
+    }
+
+    cout << std::fixed << std::setprecision(5);
+    cout << "-----------------------------------------\n";
+    cout << "| Metric             | Value           |\n";
+    cout << "-----------------------------------------\n";
+    cout << "| Arrival Rate       | " << setw(15) << core.arrivalRate << " |\n";
+    cout << "| Service Time       | " << setw(15) << core.serviceTime << " |\n";
+    cout << "| Average Turnaround | " << setw(15) << avg_turnaround << " |\n";
+    cout << "| Throughput         | " << setw(15) << throughput << " |\n";
+    cout << "| CPU Utilization         " << setw(15) << "|\n"; 
+    for (int i = 0; i < core.numProcessors; i++)
+    {
+        cout << "| Core " << i << ":             " << setw(15) << cpu_utils[i] << "% |\n";
+    }
+    cout << "| Average RQ Length  | " << setw(15) << avg_rq << " |\n";
+    cout << "-----------------------------------------\n";
+
+}
+
+void logMetricsS1(string path)
+{
+    cout << "log path: " << path << endl;
+    std::ofstream outFile(path, std::ios::app);
+    if (!outFile) {
+        std::cerr << "Error opening log file path." << std::endl;
+    }
+    else
+    {
+        outFile << "arrivalRate, serviceTime, throughput, turnaroundTime"
+                << ", core0_util, core1_util, core2_util, core3_util"
+                << "avg_core0_rqLen, avg_core1_rqLen, avg_core2_rqLen, avg_core3_rqLen"
+                << endl;
+        outFile << core.arrivalRate << "," << core.serviceTime << "," << (core.turnarounds / LENGTH)
+        << "," << (LENGTH / core.time_piece) << "," 
+        << core.queuePairs[0]->active_count / core.sample_polls << ","
+        << core.queuePairs[1]->active_count / core.sample_polls << ","
+        << core.queuePairs[2]->active_count / core.sample_polls << ","
+        << core.queuePairs[3]->active_count / core.sample_polls << ","
+        << core.queuePairs[0]->sample_queue / core.sample_polls << ","
+        << core.queuePairs[1]->sample_queue / core.sample_polls << ","
+        << core.queuePairs[2]->sample_queue / core.sample_polls << ","
+        << core.queuePairs[3]->sample_queue / core.sample_polls << endl;
+        outFile.close();
+        cout << "Results written to logs" << endl;
+    }
+}
+
+void logMetricsS2(string path)
+{
+    cout << "log path: " << path << endl;
+    std::ofstream outFile(path, std::ios::app);
+    if (!outFile) {
+        std::cerr << "Error opening log file path." << std::endl;
+    }
+    else
+    {
+        outFile << "arrivalRate, serviceTime, throughput, turnaroundTime"
+                << ", core0_util, core1_util, core2_util, core3_util"
+                << "avg_rqLen" << endl;
+        outFile << core.arrivalRate << "," << core.serviceTime << "," << (core.turnarounds / LENGTH)
+        << "," << (LENGTH / core.time_piece) << "," 
+        << core.queuePairs[0]->active_count / core.sample_polls << ","
+        << core.queuePairs[1]->active_count / core.sample_polls << ","
+        << core.queuePairs[2]->active_count / core.sample_polls << ","
+        << core.queuePairs[3]->active_count / core.sample_polls << ","
+        << (core.sample_queue / core.sample_polls) << endl;
+        outFile.close();
+        cout << "Results written to logs" << endl;
+    }
 }
 
 float expRandom(float lambda)
