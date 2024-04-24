@@ -50,12 +50,24 @@ int main(int argc, char *argv[])
         Event* event = core.eq.getEvent();
         core.time_piece = event->time;
 
-        if (event->type == "arrival")
-            {handleArrival(event, core.scenario);}
-        else if (event->type == "departure")
-            {handleDeparture(event, core.scenario);}
-        else
-            {handlePoll(event, core.scenario);}
+        if (core.scenario == 1)
+        {
+            if (event->type == "arrival")
+                {handleArrivalS1(event);}
+            else if (event->type == "departure")
+                {handleDepartureS1(event);}
+            else
+                {handlePollS1(event);}
+        } else {
+            if (event->type == "arrival")
+                {handleArrivalS2(event);}
+            else if (event->type == "departure")
+                {handleDepartureS2(event);}
+            else
+                {handlePollS2(event);}
+
+        }
+
 
     }
 
