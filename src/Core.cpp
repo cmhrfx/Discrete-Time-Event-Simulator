@@ -11,17 +11,12 @@ Core::Core() {
     arrivals = 0;
     departures = 0;
     processes_empty = false;
-    events_empty = false;
 
     // polling
     sample_queue = 0;
     sample_polls = 0;
     polling_interval = 0.1;
     pollProcess = new Process(-1,0,0);
-
-    // scenario 2 specific
-    cpu_active_count = 0;
-    cpu_status = 0;
 
 };
 

@@ -8,38 +8,34 @@
 
 struct Core {
     // essential properties
-    float time_piece;
-    float turnarounds;
-    float arrivalRate;
-    float serviceTime;
-    int scenario;
-    int numProcessors;
-    int arrivals;
-    int departures;
-    bool processes_empty;
-    bool events_empty;
+    float time_piece;           // clock
+    float turnarounds;          // cumulative time all processes take from arrival to departure
+    float arrivalRate;          // console arg rate of arrivals
+    float serviceTime;          // console arg avg time to complete process
+    int scenario;               // console arg scenario 1 or 2 (1: multiple rq, 2: single rq)
+    int numProcessors;          // console arg number of processors
+    int arrivals;               // for debugging, keep track of arrival events
+    int departures;             // for debugging, keep track of departure events
+    bool processes_empty;       // so we can tell our poll handling to stop making new polls
     
-    ProcessList processList;
-    EventQueue eq;
-    ReadyQueue rq;
+    ProcessList processList;    // holds the 10,000 processes instantiated at beginning of program
+    EventQueue eq;              // global event queue to handle arrivals, departures, and polls
+    ReadyQueue rq;              // global ready queue used in scenario 2
 
     // polling
-    float sample_queue;
-    float sample_polls;
-    float polling_interval;
-    Process* pollProcess;
+    float sample_queue;         // cumulative number of s2 ready queue members counted in polls
+    float sample_polls;         // total number of polls taken
+    float polling_interval;     // interval between polls
+    Process* pollProcess;       // dummy process to be used for poll events
 
     // scenario 1 specific properties
-    std::map<int, QueuePair*> queuePairs;
+    std::map<int, QueuePair*> queuePairs;   // map of readyQueue->Processor pairs for scenario 1
 
-    // scenario 2 specific properties
-    float cpu_active_count;
-    int cpu_status;
-
-    // initialize core vars based on scenario
     Core();
     ~Core();
-    void initialize();
+
+    void initialize();          // used to populate processList and QueuePair data structs
+                                // after console args have been provided
 
 };
 

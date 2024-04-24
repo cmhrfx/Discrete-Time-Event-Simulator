@@ -1,8 +1,23 @@
 /*
 Christopher Hanly
 CS.3360.253 Computing Systems Fundamentals
+Homework 5
 Professor: Mina Guirguis
 04/22/2024
+
+In Homework 5, we expand on Homework 4's Discrete Time Event Simulator.
+Now we present a Discrete Time Event Simulator that offers two designs:
+1. The "Grocery Store" design that uses an individual ready queue for each processor
+2. The "Airport" design that uses a central ready queue for all processors
+
+Based on the console arguments provided, one of either scenario will be ran by the program.
+Once complete, metrics will be displayed to the console and exported to either "cmh171s1.txt"
+or "cmh171s2.txt", depending on the scenario selected.
+
+Finally, certain parts of this implementation are designed to handle a variable number of processors.
+However, it appears that fully implementing "n" processors is extraneous to design specifications.
+Thus, the design is implemented specifically for 4 processors and will exhibit problems if any other
+number of processors is used. 
 */
 
 #include "main.h"
@@ -42,9 +57,8 @@ int main(int argc, char *argv[])
     // core variables
     core.initialize();
 
-    // test processList population
-    // core.processList.listToConsole();
 
+    // CORE FUNCTIONAL LOOP
     while (!core.eq.events.empty())
     {
         Event* event = core.eq.getEvent();
@@ -52,6 +66,7 @@ int main(int argc, char *argv[])
 
         if (core.scenario == 1)
         {
+            // S1 BRANCH
             if (event->type == "arrival")
                 {handleArrivalS1(event);}
             else if (event->type == "departure")
@@ -59,6 +74,8 @@ int main(int argc, char *argv[])
             else
                 {handlePollS1(event);}
         } else {
+
+            // S2 BRANCH
             if (event->type == "arrival")
                 {handleArrivalS2(event);}
             else if (event->type == "departure")
@@ -68,6 +85,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    // OUTPUT TO CONSOLE AND LOG
     if (core.scenario == 1)
     {
         outputMetricsS1();
