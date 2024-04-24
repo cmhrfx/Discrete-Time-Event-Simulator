@@ -9,6 +9,8 @@ struct QueuePair {
 
     ReadyQueue* rq;
     Processor* prc;
+    int active_count;
+    int sample_queue;
 };
 
 

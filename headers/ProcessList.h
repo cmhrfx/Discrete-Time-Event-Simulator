@@ -3,7 +3,6 @@
 
 #include "Process.h"
 #include "Event.h"
-#include "Functions.h"
 #include <cstdlib>
 #include <list>
 #include <iostream>
@@ -22,6 +21,8 @@ struct ProcessList {
     Process* popProcess();
     bool isEmpty();
     void populateList(float arrivalRate, float serviceTime);
+    float expRandom(float lambda);
+    float rand0to1();
     
 };
 

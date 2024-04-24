@@ -52,18 +52,6 @@ void argChecktoConsole(int flag)
         {cout << "Must select scenario 1 or 2. Please try again.\n";}
 }
 
-
-float expRandom(float lambda)
-{
-    float random = rand() / (RAND_MAX + 1.0);
-    return -log(1 - random) / lambda;
-}
-
-float rand0to1()
-{
-    return (rand() / (RAND_MAX + 1.0));
-}
-
 // handleArrival() is a core function of the Discrete Time Event Simulator engine.
 // Called when current Event is an arrival.
 // Based on the cpu_status, one of two paths will be taken:
@@ -75,23 +63,27 @@ float rand0to1()
 // to the event queue. 
 void handleArrivalS1(Event* event)
 {
-    core.arrivals++;
     int targetProcessor = -1;
     int currentProcessor = event->processorId;
 
-    // Path 1- idle CPU
-    if (core.processors[currentProcessor]->cpu_status == 0)
+    // don't handle "dummy" events
+    if (currentProcessor != -1)
     {
-        core.processors[currentProcessor]->cpu_status = 1;
-        float interval = event->process->serviceTime + core.time_piece;
-        Event* newDeparture = new Event(event->process, interval, "departure", currentProcessor);
-        core.eq.scheduleEvent(newDeparture);
+        core.arrivals++;
+        // Path 1- idle CPU
+        if (core.processors[currentProcessor]->cpu_status == 0 )
+        {
+            core.processors[currentProcessor]->cpu_status = 1;
+            float interval = event->process->serviceTime + core.time_piece;
+            Event* newDeparture = new Event(event->process, interval, "departure", currentProcessor);
+            core.eq.scheduleEvent(newDeparture);
+        }
+        // Path 2- busy CPU
+        else {
+            core.queuePairs[currentProcessor]->rq->addProcess(event->process);
+        }
     }
-    // Path 2- busy CPU
-    else {
-        core.queuePairs[currentProcessor]->rq->addProcess(event->process);
-    }
-    
+
     // Both paths end in the creation of a new arrival event from ProcessList
     Process* nextProcess = core.processes.popProcess();
 
@@ -166,12 +158,12 @@ void handlePollS1(Event* event)
 {
     if (!core.processes_empty)
     {
-        for (int i = 0; i < numProcessors; i++)
+        for (int i = 0; i < core.numProcessors; i++)
         {
-            core.queuePairs[i].sample_queue += core.queuePairs[i]->rq.size();
+            core.queuePairs[i]->sample_queue += core.queuePairs[i]->rq->size();
             if (core.queuePairs[i]->prc->cpu_status == 1)
             {
-                core.queuePairs[i].active_count++;
+                core.queuePairs[i]->active_count++;
             }
         }
         core.sample_polls++;
@@ -278,11 +270,11 @@ void handlePollS2(Event* event)
         core.sample_queue += core.rq.size();
         core.sample_polls++;
 
-        for (int i = 0; i < numProcessors; i++)
+        for (int i = 0; i < core.numProcessors; i++)
         {
             if (core.queuePairs[i]->prc->cpu_status == 1)
             {
-                core.queuePairs[i].active_count++;
+                core.queuePairs[i]->active_count++;
             }
         }
 
@@ -291,4 +283,56 @@ void handlePollS2(Event* event)
         core.eq.scheduleEvent(nextPoll);
     }
 
+}
+
+void outputMetrics()
+{
+    float avg_turnaround = core.turnarounds / LENGTH;
+    float throughput = LENGTH / core.time_piece;
+    float cpu = core.cpu_active_count / core.sample_polls;
+    float avg_rq = core.sample_queue / core.sample_polls;
+    std::map<int, float>cpu_utils;
+    std::map<int, float>queue_lengths;
+
+    for (int i = 0; i < core.numProcessors; i++)
+    {
+        cpu_utils[i] = core.queuePairs[i]->active_count / core.sample_polls;
+    }
+
+    for (int i = 0; i < core.numProcessors; i++)
+    {
+        queue_lengths[i] = core.queuePairs[i]->sample_queue / core.sample_polls;
+    }
+
+    cout << std::fixed << std::setprecision(5);
+    cout << "-----------------------------------------\n";
+    cout << "| Metric             | Value           |\n";
+    cout << "-----------------------------------------\n";
+    cout << "| Arrival Rate       | " << setw(15) << core.arrivalRate << " |\n";
+    cout << "| Service Time       | " << setw(15) << core.serviceTime << " |\n";
+    cout << "| Average Turnaround | " << setw(15) << avg_turnaround << " |\n";
+    cout << "| Throughput         | " << setw(15) << throughput << " |\n";
+    cout << "| CPU Utilization    : " << setw(15) << "|\n"; 
+    for (int i = 0; i < core.numProcessors; i++)
+    {
+        cout << "| Core " << i << ": " << setw(15) << cpu_utils[i] << "% |\n";
+    }
+    cout << "| Average RQ Length  : " << setw(15) << " |\n";
+    for (int i = 0; i < core.numProcessors; i++)
+    {
+        cout << "| Core " << i << ": " << setw(15) << " |\n";
+    }
+    cout << "-----------------------------------------\n";
+
+}
+
+float expRandom(float lambda)
+{
+    float random = rand() / (RAND_MAX + 1.0);
+    return -log(1 - random) / lambda;
+}
+
+float rand0to1()
+{
+    return (rand() / (RAND_MAX + 1.0));
 }

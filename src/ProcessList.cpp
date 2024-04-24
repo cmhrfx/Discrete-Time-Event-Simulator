@@ -77,3 +77,13 @@ ProcessList::~ProcessList()
     processes.clear();
 }
 
+float ProcessList::expRandom(float lambda)
+{
+    float random = rand() / (RAND_MAX + 1.0);
+    return -log(1 - random) / lambda;
+}
+
+float ProcessList::rand0to1()
+{
+    return (rand() / (RAND_MAX + 1.0));
+}

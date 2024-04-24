@@ -67,10 +67,9 @@ int main(int argc, char *argv[])
                 {handlePollS2(event);}
 
         }
-
-
     }
 
+    outputMetrics();
 
 
     

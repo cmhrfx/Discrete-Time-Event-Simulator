@@ -55,6 +55,5 @@ void Core::initialize()
             Processor* prc = new Processor();
             processors[i] = prc;
         }
-
     }
 }

@@ -8,6 +8,7 @@
 #include <ctime>
 #include <random>
 #include <math.h>
+#include <map>
 #include "Event.h"
 #include "Core.h"
 
@@ -20,12 +21,15 @@ extern Core core;
 
 int argChecks(int argc, char *argv[]);      // check cmdline args
 void argChecktoConsole(int flag);           // output cmdline arg errors
-float expRandom(float lambda);
+void handleArrivalS1(Event* event);           // logic sequence for arrival events
+void handleDepartureS1(Event* event);         // logic sequence for departure events
+void handlePollS1(Event* event);              // logic sequence for poll events
+void handleArrivalS2(Event* event);           // logic sequence for arrival events
+void handleDepartureS2(Event* event);         // logic sequence for departure events
+void handlePollS2(Event* event);              // logic sequence for poll events
+void outputMetrics();
 float rand0to1();
-void handleArrival(Event* event);           // logic sequence for arrival events
-void handleDeparture(Event* event);         // logic sequence for departure events
-void handlePoll(Event* event);              // logic sequence for poll events
-
+float expRandom(float lambda);
 
 
 
