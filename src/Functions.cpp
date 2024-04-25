@@ -199,18 +199,21 @@ void handleArrivalS2(Event* event)
         {
             int openProcessor = -1;
             int count = 0;
+            int rand_shift = (rand() % 4);
             // seek for an idle processor
             while (openProcessor == -1 && count < core.numProcessors)
             {
-                if (core.queuePairs[count]->prc->cpu_status == 0)
+                rand_shift = rand_shift%core.numProcessors;
+                if (core.queuePairs[rand_shift]->prc->cpu_status == 0)
                 {
-                    openProcessor = count;
-                    core.queuePairs[count]->prc->cpu_status = 1;
+                    openProcessor = rand_shift;
+                    core.queuePairs[rand_shift]->prc->cpu_status = 1;
                     float interval = event->process->serviceTime + core.time_piece;
-                    Event* newDeparture = new Event(event->process, interval, "departure", count);
+                    Event* newDeparture = new Event(event->process, interval, "departure", rand_shift);
                     core.eq.scheduleEvent(newDeparture);
                 }
                 count++;
+                rand_shift++;
             }
             // if none are found, push to the back of the ready queue
             if (openProcessor == -1)
